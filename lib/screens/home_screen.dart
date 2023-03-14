@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
         ),
         elevation: 1,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.green,
+        foregroundColor: Colors.blueAccent.shade200,
       ),
       body: FutureBuilder(
         future: webtoons,
@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: makeList(snapshot),
-                )
+                ),
               ],
             );
           }

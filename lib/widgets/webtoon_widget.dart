@@ -46,7 +46,7 @@ class Webtoon extends StatelessWidget {
                     blurRadius: 15,
                     offset: const Offset(10, 10),
                     color: Colors.black.withOpacity(0.3),
-                  )
+                  ),
                 ],
               ),
               child: Image.network(

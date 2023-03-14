@@ -24,7 +24,7 @@ class DetailScreen extends StatelessWidget {
         ),
         elevation: 1,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.green,
+        foregroundColor: Colors.blueAccent.shade200,
       ),
       body: Column(
         children: [
@@ -46,7 +46,7 @@ class DetailScreen extends StatelessWidget {
                         blurRadius: 15,
                         offset: const Offset(10, 10),
                         color: Colors.black.withOpacity(0.3),
-                      )
+                      ),
                     ],
                   ),
                   child: Image.network(
@@ -58,7 +58,7 @@ class DetailScreen extends StatelessWidget {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
