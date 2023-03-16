@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toonflex/model/webtoon_detail_model.dart';
 import 'package:toonflex/model/webtoon_episode_model.dart';
 import 'package:toonflex/services/api_service.dart';
 import 'package:toonflex/widgets/episode_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DetailScreen extends StatefulWidget {
   final String id, title, thumb;
@@ -22,6 +23,24 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   late Future<WebToonDetailModel> webtoon;
   late Future<List<WebtoonEpisodeModel>> episodes;
+  late SharedPreferences prefs;
+  bool isLiked = false;
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final likedToons =  prefs.getStringList("likedToons");
+
+    if (likedToons != null) {
+      // Complete here
+      if (likedToons.contains(widget.id) == true) {
+        setState(() {
+          isLiked = true;
+        });
+      }
+    } else {
+      await prefs.setStringList('likedToons', []);
+    }
+  }
 
   @override
   void initState() {
@@ -29,6 +48,24 @@ class _DetailScreenState extends State<DetailScreen> {
 
     webtoon = ApiService.getToonById(widget.id);
     episodes = ApiService.getLatestEpisodesById(widget.id);
+    initPrefs();
+  }
+
+  onHeartTap() async {
+    final likedToons =  prefs.getStringList("likedToons");
+
+    if (likedToons != null) {
+      if (isLiked) {
+        likedToons.remove(widget.id);
+      } else {
+        likedToons.add(widget.id);
+      }
+      await prefs.setStringList("likedToons", likedToons);
+
+      setState(() {
+        isLiked = !isLiked;
+      });
+    }
   }
 
   @override
@@ -44,6 +81,14 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
         elevation: 1,
+        actions: [
+          IconButton(
+            onPressed: onHeartTap,
+            icon: Icon(
+                isLiked ? Icons.favorite : Icons.favorite_outline
+            ),
+          ),
+        ],
         backgroundColor: Colors.white,
         foregroundColor: Colors.blueAccent.shade200,
       ),
